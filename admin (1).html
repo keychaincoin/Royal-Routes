@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Royal Route Holidays</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0B1829; --navy-mid: #152540; --gold: #C9A84C; --gold-light: #E8C96A;
+    --white: #FFFFFF; --off: #F7F5F0; --text: #1A1A2E; --muted: #6B7280;
+    --border: #E5E1D8; --success: #22C55E; --danger: #EF4444;
+    --radius: 4px; --radius-lg: 10px;
+    --sidebar: 240px;
+  }
+  body { font-family: 'Montserrat', sans-serif; background: #F2F0EB; color: var(--text); font-size: 14px; -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar); background: var(--navy);
+    position: fixed; top: 0; left: 0; bottom: 0;
+    display: flex; flex-direction: column;
+    border-right: 1px solid rgba(201,168,76,0.12);
+  }
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .logo-mark { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .logo-sub { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-top: 2px; }
+  .sidebar-nav { padding: 20px 12px; flex: 1; }
+  .nav-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); padding: 0 8px; margin-bottom: 8px; margin-top: 16px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 10px; border-radius: var(--radius);
+    cursor: pointer; transition: all 0.15s;
+    font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5);
+    text-decoration: none;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.8); }
+  .nav-item.active { background: rgba(201,168,76,0.12); color: var(--gold); }
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 11px; color: rgba(255,255,255,0.3);
+  }
+  .sidebar-footer strong { color: rgba(255,255,255,0.6); display: block; }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 0 36px; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .topbar-title span { font-weight: 300; color: var(--muted); }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+  .badge-gold { background: rgba(201,168,76,0.12); color: var(--gold); }
+
+  .content { padding: 32px 36px; flex: 1; }
+
+  /* TABS */
+  .tab-bar { display: flex; gap: 2px; background: var(--off); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; margin-bottom: 28px; width: fit-content; }
+  .tab-btn {
+    padding: 8px 18px; border-radius: 3px; border: none;
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+    transition: all 0.15s; background: transparent; color: var(--muted);
+  }
+  .tab-btn.active { background: var(--white); color: var(--navy); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  /* CARDS */
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; letter-spacing: 0.3px; }
+  .card-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; }
+  .stat-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .stat-num { font-size: 28px; font-weight: 700; color: var(--navy); }
+  .stat-trend { font-size: 11px; color: var(--success); margin-top: 4px; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); }
+  .field input, .field select, .field textarea {
+    border: 1.5px solid var(--border); border-radius: var(--radius);
+    padding: 10px 12px; font-family: 'Montserrat', sans-serif;
+    font-size: 13px; color: var(--text); background: var(--white);
+    transition: border-color 0.2s; outline: none; -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); }
+
+  /* FEATURE TAGS */
+  .tags-input { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: var(--radius); background: var(--white); min-height: 44px; cursor: text; }
+  .tag-chip { background: var(--off); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 4px; }
+  .tag-chip .rm { cursor: pointer; color: var(--muted); font-size: 12px; }
+  .tag-chip .rm:hover { color: var(--danger); }
+  .tags-bare { border: none; outline: none; font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text); background: transparent; flex: 1; min-width: 80px; }
+
+  /* IMAGE UPLOAD */
+  .img-upload {
+    border: 2px dashed var(--border); border-radius: var(--radius-lg);
+    padding: 32px; text-align: center; cursor: pointer;
+    transition: all 0.2s; background: var(--off);
+  }
+  .img-upload:hover { border-color: var(--gold); background: #FFFBF0; }
+  .img-upload input { display: none; }
+  .img-upload-icon { font-size: 32px; margin-bottom: 8px; }
+  .img-upload-text { font-size: 12px; font-weight: 600; color: var(--navy); }
+  .img-upload-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .img-preview { width: 100%; max-height: 180px; object-fit: cover; border-radius: var(--radius-lg); display: none; }
+
+  /* CAR TABLE */
+  .car-table { width: 100%; border-collapse: collapse; }
+  .car-table th { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 0 12px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .car-table td { padding: 14px 12px; border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle; }
+  .car-table tr:last-child td { border-bottom: none; }
+  .car-table tr:hover td { background: var(--off); }
+  .car-thumb-sm { width: 56px; height: 36px; border-radius: 5px; object-fit: cover; background: var(--off); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .car-thumb-sm img { width: 56px; height: 36px; border-radius: 5px; object-fit: cover; }
+  .car-name-cell { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .car-sub-cell { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .price-cell { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .feat-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .feat-pill { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; background: var(--off); border: 1px solid var(--border); color: var(--navy); padding: 2px 6px; border-radius: 3px; }
+  .action-btns { display: flex; gap: 6px; }
+  .btn-edit { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; border-radius: var(--radius); border: 1.5px solid var(--border); background: transparent; color: var(--navy); cursor: pointer; transition: all 0.15s; }
+  .btn-edit:hover { border-color: var(--navy); }
+  .btn-del { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 12px; border-radius: var(--radius); border: 1.5px solid transparent; background: rgba(239,68,68,0.07); color: var(--danger); cursor: pointer; transition: all 0.15s; }
+  .btn-del:hover { background: rgba(239,68,68,0.15); }
+
+  /* SAVE BTN */
+  .btn-save {
+    background: var(--navy); border: none;
+    padding: 12px 28px; font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--white); cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s; margin-top: 20px;
+  }
+  .btn-save:hover { background: var(--gold); color: var(--navy); }
+  .btn-add {
+    background: var(--gold); border: none;
+    padding: 10px 20px; font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--navy); cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s;
+  }
+  .btn-add:hover { background: var(--gold-light); }
+
+  /* BOOKINGS TABLE */
+  .bk-table { width: 100%; border-collapse: collapse; }
+  .bk-table th { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 0 12px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .bk-table td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 12px; }
+  .bk-table tr:hover td { background: var(--off); }
+  .status-pill { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+  .status-new { background: rgba(201,168,76,0.12); color: #B8870A; }
+  .status-confirmed { background: rgba(34,197,94,0.1); color: #16a34a; }
+  .ref-code { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--muted); font-family: monospace; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--navy); color: var(--white);
+    padding: 14px 20px; border-radius: var(--radius-lg);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+    border-left: 3px solid var(--gold);
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s; z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .hidden { display: none !important; }
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">Royal Route</div>
+    <div class="logo-sub">Admin Panel</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Overview</div>
+    <a class="nav-item active" onclick="showTab('dashboard')"><span class="nav-icon">📊</span>Dashboard</a>
+    <div class="nav-label">Management</div>
+    <a class="nav-item" onclick="showTab('cars')"><span class="nav-icon">🚗</span>Vehicles</a>
+    <a class="nav-item" onclick="showTab('packages')"><span class="nav-icon">🗺️</span>Packages</a>
+    <a class="nav-item" onclick="showTab('bookings')"><span class="nav-icon">📋</span>Bookings</a>
+    <div class="nav-label">Settings</div>
+    <a class="nav-item" onclick="showTab('contact')"><span class="nav-icon">⚙️</span>Contact Info</a>
+    <a class="nav-item" href="index.html" target="_blank"><span class="nav-icon">↗</span>View Website</a>
+  </nav>
+  <div class="sidebar-footer">
+    <strong>Anny Singh</strong>
+    +91-9024205389
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard <span>/ Overview</span></div>
+    <div class="topbar-actions">
+      <span class="badge badge-gold">Admin</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Bookings</div>
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-trend">↑ This month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Vehicles</div>
+          <div class="stat-num" id="stat-cars">6</div>
+          <div class="stat-trend">In fleet</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Top Destination</div>
+          <div class="stat-num" style="font-size:18px" id="stat-dest">Manali</div>
+          <div class="stat-trend">Most booked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Contact</div>
+          <div class="stat-num" style="font-size:16px">9024205389</div>
+          <div class="stat-trend">Always available</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recent Bookings</div>
+        <div class="card-sub">Last 10 submissions from the booking form</div>
+        <table class="bk-table" id="dash-bk-table">
+          <thead><tr>
+            <th>Ref</th><th>Name</th><th>Destination</th><th>Date</th><th>Pax</th><th>Vehicle</th><th>Payment</th><th>Status</th>
+          </tr></thead>
+          <tbody id="dash-bk-body"></tbody>
+        </table>
+        <div id="dash-empty" style="text-align:center;padding:40px;color:var(--muted);font-size:12px;">No bookings yet. They'll appear here once customers book.</div>
+      </div>
+    </div>
+
+    <!-- VEHICLES -->
+    <div id="tab-cars" class="hidden">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+          <div>
+            <div class="card-title">Vehicle Fleet</div>
+            <div class="card-sub">Manage cars shown to customers on the booking form</div>
+          </div>
+          <button class="btn-add" onclick="openAddCar()">+ Add Vehicle</button>
+        </div>
+        <table class="car-table" id="carTable">
+          <thead><tr>
+            <th>Photo</th><th>Vehicle</th><th>Capacity</th><th>Price / Day</th><th>Features</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="carTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- ADD / EDIT CAR FORM -->
+      <div class="card" id="carForm" style="display:none;">
+        <div class="card-title" id="carFormTitle">Add New Vehicle</div>
+        <div class="card-sub">Fill in the details. Changes are saved to the booking form instantly.</div>
+
+        <div class="img-upload" onclick="document.getElementById('carImgInput').click()">
+          <input type="file" id="carImgInput" accept="image/*" onchange="previewImg(this)">
+          <img class="img-preview" id="imgPreview">
+          <div id="imgPlaceholder">
+            <div class="img-upload-icon">📷</div>
+            <div class="img-upload-text">Upload vehicle photo</div>
+            <div class="img-upload-sub">JPG or PNG, max 2MB</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="field"><label>Vehicle Name</label><input type="text" id="car-name" placeholder="e.g. Toyota Innova Crysta"></div>
+          <div class="field"><label>Emoji Icon</label><input type="text" id="car-emoji" placeholder="🚗" maxlength="4"></div>
+          <div class="field"><label>Seating Capacity</label><select id="car-seats">
+            <option>4 Seater</option><option>6 Seater</option><option>7 Seater</option>
+            <option>9 Seater</option><option>12 Seater</option><option>17 Seater</option><option>20 Seater</option>
+          </select></div>
+          <div class="field"><label>Price Per Day (₹)</label><input type="number" id="car-price" placeholder="4500"></div>
+          <div class="field"><label>Category</label><select id="car-cat">
+            <option value="sedan">Sedan</option>
+            <option value="suv">SUV / MUV</option>
+            <option value="tempo">Tempo Traveller</option>
+            <option value="luxury">Luxury</option>
+          </select></div>
+          <div class="field"><label>Status</label><select id="car-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select></div>
+        </div>
+
+        <div class="field" style="margin-bottom:16px;">
+          <label>Features (press Enter to add)</label>
+          <div class="tags-input" id="tagsContainer" onclick="document.getElementById('tagInput').focus()">
+            <input class="tags-bare" id="tagInput" placeholder="Type a feature and press Enter…" onkeydown="addTag(event)">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Notes (internal)</label>
+          <textarea id="car-notes" rows="2" placeholder="Any notes for internal use…"></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="btn-save" onclick="saveCar()">Save Vehicle</button>
+          <button class="btn-edit" onclick="cancelCarForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PACKAGES -->
+    <div id="tab-packages" class="hidden">
+      <div class="card">
+        <div class="card-title">Destination Packages</div>
+        <div class="card-sub">Set base package prices for each destination (displayed on the booking confirmation)</div>
+        <div id="pkgList"></div>
+        <button class="btn-save" onclick="savePkgs()">Save Prices</button>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div id="tab-bookings" class="hidden">
+      <div class="card">
+        <div class="card-title">All Bookings</div>
+        <div class="card-sub">Complete booking history from the website form</div>
+        <div style="margin-bottom:16px;display:flex;gap:10px;">
+          <select id="bkFilter" onchange="renderBookings()" style="border:1.5px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--text);outline:none;">
+            <option value="all">All Destinations</option>
+            <option value="manali">Manali</option>
+            <option value="kedarnath">Kedarnath</option>
+            <option value="rishikesh">Rishikesh</option>
+            <option value="shimla">Shimla</option>
+            <option value="goa">Goa</option>
+            <option value="kerala">Kerala</option>
+          </select>
+          <button class="btn-edit" onclick="clearBookings()">Clear All</button>
+        </div>
+        <table class="bk-table">
+          <thead><tr>
+            <th>Ref</th><th>Name</th><th>Phone</th><th>Destination</th><th>Date</th><th>Pax</th><th>Vehicle</th><th>Payment</th><th>Booked On</th>
+          </tr></thead>
+          <tbody id="bkTableBody"></tbody>
+        </table>
+        <div id="bk-empty" style="display:none;text-align:center;padding:40px;color:var(--muted);font-size:12px;">No bookings found.</div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="tab-contact" class="hidden">
+      <div class="card">
+        <div class="card-title">Business Contact Info</div>
+        <div class="card-sub">This information appears on the website footer and WhatsApp booking</div>
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="field"><label>Owner Name</label><input type="text" id="c-owner" value="Anny Singh"></div>
+          <div class="field"><label>Phone Number</label><input type="tel" id="c-phone" value="+91-9024205389"></div>
+          <div class="field"><label>WhatsApp Number</label><input type="tel" id="c-wa" value="919024205389"></div>
+          <div class="field"><label>Email</label><input type="email" id="c-email" placeholder="info@royalrouteholidays.com"></div>
+          <div class="field full"><label>Address / Location</label><input type="text" id="c-addr" value="Ganeshwar, Navi Mumbai"></div>
+          <div class="field full"><label>Tagline</label><input type="text" id="c-tag" value="Your Journey, Our Responsibility"></div>
+        </div>
+        <button class="btn-save" onclick="saveContact()">Save Contact Info</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────
+const defaultCars = [
+  { id:'dzire', name:'Maruti Swift Dzire', seats:'4 Seater', emoji:'🚗', price:2800, features:['AC','Sedan','4 Seater'], cat:'sedan', status:'active', image:'', notes:'' },
+  { id:'ertiga', name:'Maruti Ertiga', seats:'6 Seater', emoji:'🚙', price:3500, features:['AC','MUV','6 Seater'], cat:'suv', status:'active', image:'', notes:'' },
+  { id:'crysta', name:'Toyota Innova Crysta', seats:'7 Seater', emoji:'🚐', price:4500, features:['AC','Premium','7 Seater','Captain Seats'], cat:'suv', status:'active', image:'', notes:'' },
+  { id:'innova', name:'Toyota Innova', seats:'7 Seater', emoji:'🚐', price:4000, features:['AC','MPV','7 Seater'], cat:'suv', status:'active', image:'', notes:'' },
+  { id:'tempo12', name:'Tempo Traveller 12', seats:'12 Seater', emoji:'🚌', price:6500, features:['AC','Van','12 Seater','Group'], cat:'tempo', status:'active', image:'', notes:'' },
+  { id:'tempo17', name:'Tempo Traveller 17', seats:'17 Seater', emoji:'🚌', price:8000, features:['AC','Van','17 Seater','Large Group'], cat:'tempo', status:'active', image:'', notes:'' },
+];
+
+const defaultPkgs = {
+  manali: 42000, kedarnath: 35000, rishikesh: 28000,
+  shimla: 38000, goa: 45000, kerala: 52000
+};
+
+function getCars() {
+  try { return JSON.parse(localStorage.getItem('rr_cars') || 'null') || defaultCars; } catch(e) { return defaultCars; }
+}
+function saveCarsData(data) { localStorage.setItem('rr_cars', JSON.stringify(data)); }
+function getBookings() {
+  try { return JSON.parse(localStorage.getItem('rr_bookings') || '[]'); } catch(e) { return []; }
+}
+function getPkgs() {
+  try { return JSON.parse(localStorage.getItem('rr_pkgs') || 'null') || defaultPkgs; } catch(e) { return defaultPkgs; }
+}
+
+// ─── TABS ───────────────────────────────────────────────────────────────
+function showTab(tab) {
+  ['dashboard','cars','packages','bookings','contact'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('hidden', t !== tab);
+  });
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const titles = {dashboard:'Dashboard / Overview', cars:'Vehicles / Fleet Management', packages:'Packages / Pricing', bookings:'Bookings / All Records', contact:'Settings / Contact Info'};
+  document.getElementById('pageTitle').innerHTML = titles[tab] ? titles[tab].replace('/',' <span>/ ') + '</span>' : '';
+
+  if(tab === 'cars') renderCarTable();
+  if(tab === 'bookings') renderBookings();
+  if(tab === 'dashboard') renderDashboard();
+  if(tab === 'packages') renderPkgs();
+}
+
+// ─── DASHBOARD ──────────────────────────────────────────────────────────
+function renderDashboard() {
+  const bookings = getBookings();
+  document.getElementById('stat-total').textContent = bookings.length;
+  document.getElementById('stat-cars').textContent = getCars().filter(c=>c.status!=='inactive').length;
+
+  // Top dest
+  const counts = {};
+  bookings.forEach(b => { counts[b.dest] = (counts[b.dest]||0)+1; });
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(top) document.getElementById('stat-dest').textContent = top[0].charAt(0).toUpperCase()+top[0].slice(1);
+
+  const tbody = document.getElementById('dash-bk-body');
+  const empty = document.getElementById('dash-empty');
+  if(!bookings.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  const recent = [...bookings].reverse().slice(0,10);
+  tbody.innerHTML = recent.map(b => `
+    <tr>
+      <td class="ref-code">${b.ref||'—'}</td>
+      <td style="font-weight:600">${b.name||'—'}</td>
+      <td style="text-transform:capitalize">${b.dest||'—'}</td>
+      <td>${b.date ? new Date(b.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '—'}</td>
+      <td>${b.pax||'—'}</td>
+      <td>${b.car||'—'}</td>
+      <td style="text-transform:capitalize">${b.payment||'—'}</td>
+      <td><span class="status-pill status-new">New</span></td>
+    </tr>`).join('');
+}
+
+// ─── CARS ───────────────────────────────────────────────────────────────
+let editingCarId = null;
+let currentTags = [];
+let currentImgData = '';
+
+function renderCarTable() {
+  const cars = getCars();
+  const tbody = document.getElementById('carTableBody');
+  tbody.innerHTML = cars.map(car => `
+    <tr>
+      <td>${car.image ? `<img src="${car.image}" style="width:56px;height:36px;border-radius:5px;object-fit:cover;">` : `<div class="car-thumb-sm" style="background:var(--off);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:20px;">${car.emoji||'🚗'}</div>`}</td>
+      <td><div class="car-name-cell">${car.name}</div><div class="car-sub-cell">${car.cat||''}</div></td>
+      <td>${car.seats}</td>
+      <td class="price-cell">₹${(car.price||0).toLocaleString()}</td>
+      <td><div class="feat-pills">${(car.features||[]).map(f=>`<span class="feat-pill">${f}</span>`).join('')}</div></td>
+      <td><div class="action-btns">
+        <button class="btn-edit" onclick="openEditCar('${car.id}')">Edit</button>
+        <button class="btn-del" onclick="deleteCar('${car.id}')">Remove</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function openAddCar() {
+  editingCarId = null; currentTags = []; currentImgData = '';
+  document.getElementById('carFormTitle').textContent = 'Add New Vehicle';
+  document.getElementById('car-name').value=''; document.getElementById('car-emoji').value='🚗';
+  document.getElementById('car-price').value=''; document.getElementById('car-notes').value='';
+  document.getElementById('car-seats').value='7 Seater';
+  document.getElementById('car-cat').value='suv';
+  document.getElementById('car-status').value='active';
+  renderTags();
+  document.getElementById('imgPreview').style.display='none';
+  document.getElementById('imgPlaceholder').style.display='block';
+  document.getElementById('carForm').style.display='block';
+  document.getElementById('carForm').scrollIntoView({behavior:'smooth'});
+}
+
+function openEditCar(id) {
+  const cars = getCars();
+  const car = cars.find(c=>c.id===id);
+  if(!car) return;
+  editingCarId = id; currentTags = [...(car.features||[])]; currentImgData = car.image||'';
+  document.getElementById('carFormTitle').textContent = 'Edit Vehicle';
+  document.getElementById('car-name').value = car.name||'';
+  document.getElementById('car-emoji').value = car.emoji||'🚗';
+  document.getElementById('car-price').value = car.price||'';
+  document.getElementById('car-notes').value = car.notes||'';
+  document.getElementById('car-seats').value = car.seats||'7 Seater';
+  document.getElementById('car-cat').value = car.cat||'suv';
+  document.getElementById('car-status').value = car.status||'active';
+  renderTags();
+  if(car.image) {
+    document.getElementById('imgPreview').src = car.image;
+    document.getElementById('imgPreview').style.display='block';
+    document.getElementById('imgPlaceholder').style.display='none';
+  } else {
+    document.getElementById('imgPreview').style.display='none';
+    document.getElementById('imgPlaceholder').style.display='block';
+  }
+  document.getElementById('carForm').style.display='block';
+  document.getElementById('carForm').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelCarForm() { document.getElementById('carForm').style.display='none'; editingCarId=null; }
+
+function saveCar() {
+  const name = document.getElementById('car-name').value.trim();
+  const price = parseInt(document.getElementById('car-price').value)||0;
+  if(!name) { showToast('Please enter a vehicle name'); return; }
+
+  const cars = getCars();
+  const carData = {
+    id: editingCarId || (name.toLowerCase().replace(/\s+/g,'-') + '-' + Date.now()),
+    name, emoji: document.getElementById('car-emoji').value||'🚗',
+    seats: document.getElementById('car-seats').value,
+    price, features: [...currentTags],
+    cat: document.getElementById('car-cat').value,
+    status: document.getElementById('car-status').value,
+    notes: document.getElementById('car-notes').value,
+    image: currentImgData
+  };
+
+  if(editingCarId) {
+    const idx = cars.findIndex(c=>c.id===editingCarId);
+    if(idx !== -1) cars[idx] = carData;
+  } else { cars.push(carData); }
+
+  saveCarsData(cars);
+  renderCarTable();
+  cancelCarForm();
+  showToast('Vehicle saved successfully ✓');
+}
+
+function deleteCar(id) {
+  if(!confirm('Remove this vehicle from the fleet?')) return;
+  const cars = getCars().filter(c=>c.id!==id);
+  saveCarsData(cars);
+  renderCarTable();
+  showToast('Vehicle removed');
+}
+
+// ─── TAGS ───────────────────────────────────────────────────────────────
+function renderTags() {
+  const container = document.getElementById('tagsContainer');
+  const input = document.getElementById('tagInput');
+  container.innerHTML = '';
+  currentTags.forEach((t,i) => {
+    const chip = document.createElement('div');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${t}<span class="rm" onclick="removeTag(${i})">×</span>`;
+    container.appendChild(chip);
+  });
+  container.appendChild(input);
+}
+function addTag(e) {
+  if(e.key==='Enter') {
+    e.preventDefault();
+    const val = document.getElementById('tagInput').value.trim();
+    if(val && !currentTags.includes(val)) { currentTags.push(val); renderTags(); document.getElementById('tagInput').value=''; }
+  }
+}
+function removeTag(i) { currentTags.splice(i,1); renderTags(); }
+
+// ─── IMAGE ──────────────────────────────────────────────────────────────
+function previewImg(input) {
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentImgData = e.target.result;
+    document.getElementById('imgPreview').src = e.target.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    document.getElementById('imgPlaceholder').style.display = 'none';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ─── PACKAGES ───────────────────────────────────────────────────────────
+function renderPkgs() {
+  const pkgs = getPkgs();
+  const names = { manali:'Manali', kedarnath:'Kedarnath', rishikesh:'Rishikesh', shimla:'Shimla', goa:'Goa', kerala:'Kerala' };
+  document.getElementById('pkgList').innerHTML = Object.entries(pkgs).map(([k,v]) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);">
+      <div style="font-size:13px;font-weight:600;color:var(--navy)">${names[k]||k}</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;color:var(--muted)">₹</span>
+        <input type="number" id="pkg-${k}" value="${v}" style="border:1.5px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--navy);width:120px;text-align:right;outline:none;">
+        <span style="font-size:11px;color:var(--muted)">base / 2 pax</span>
+      </div>
+    </div>`).join('');
+}
+
+function savePkgs() {
+  const pkgs = {};
+  ['manali','kedarnath','rishikesh','shimla','goa','kerala'].forEach(k => {
+    const el = document.getElementById('pkg-'+k);
+    if(el) pkgs[k] = parseInt(el.value)||0;
+  });
+  localStorage.setItem('rr_pkgs', JSON.stringify(pkgs));
+  showToast('Package prices saved ✓');
+}
+
+// ─── BOOKINGS ───────────────────────────────────────────────────────────
+function renderBookings() {
+  const filter = document.getElementById('bkFilter')?.value || 'all';
+  let bookings = getBookings();
+  if(filter !== 'all') bookings = bookings.filter(b => b.dest === filter);
+  bookings = [...bookings].reverse();
+  const empty = document.getElementById('bk-empty');
+  const tbody = document.getElementById('bkTableBody');
+  if(!bookings.length) { empty.style.display='block'; tbody.innerHTML=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = bookings.map(b => `
+    <tr>
+      <td class="ref-code">${b.ref||'—'}</td>
+      <td style="font-weight:600">${b.name||'—'}</td>
+      <td><a href="tel:${b.phone}" style="color:var(--navy);text-decoration:none;">${b.phone||'—'}</a></td>
+      <td style="text-transform:capitalize">${b.dest||'—'}</td>
+      <td>${b.date ? new Date(b.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</td>
+      <td>${b.pax||'—'}</td>
+      <td>${b.car||'—'}</td>
+      <td style="text-transform:capitalize">${b.payment||'—'}</td>
+      <td style="color:var(--muted)">${b.created ? new Date(b.created).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '—'}</td>
+    </tr>`).join('');
+}
+
+function clearBookings() {
+  if(!confirm('Clear all booking records? This cannot be undone.')) return;
+  localStorage.removeItem('rr_bookings');
+  renderBookings();
+  renderDashboard();
+  showToast('Bookings cleared');
+}
+
+// ─── CONTACT ────────────────────────────────────────────────────────────
+function saveContact() {
+  const d = {
+    owner: document.getElementById('c-owner').value,
+    phone: document.getElementById('c-phone').value,
+    wa: document.getElementById('c-wa').value,
+    email: document.getElementById('c-email').value,
+    addr: document.getElementById('c-addr').value,
+    tag: document.getElementById('c-tag').value,
+  };
+  localStorage.setItem('rr_contact', JSON.stringify(d));
+  showToast('Contact info saved ✓');
+}
+
+// ─── TOAST ──────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+renderDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Route Holidays — Discover India</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1829;
+    --navy-mid: #152540;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --white: #FFFFFF;
+    --off: #F7F5F0;
+    --text: #1A1A2E;
+    --muted: #6B7280;
+    --border: #E5E1D8;
+    --radius: 4px;
+    --radius-lg: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(11,24,41,0.96);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--gold);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo-text { line-height: 1; }
+  .nav-logo-text .brand { font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 2px; text-transform: uppercase; }
+  .nav-logo-text .sub { font-size: 9px; font-weight: 400; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 10px 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; border-radius: var(--radius);
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 64px 0 0;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0B1829 0%, #1a2f50 50%, #0d2040 100%);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: repeating-linear-gradient(45deg, #C9A84C 0, #C9A84C 1px, transparent 0, transparent 50%);
+    background-size: 30px 30px;
+  }
+  .hero-glow {
+    position: absolute; top: -200px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto;
+    padding: 80px 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--gold);
+  }
+  .hero-headline {
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .hero-headline strong {
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    font-size: clamp(52px, 6.5vw, 80px);
+    letter-spacing: -2px;
+  }
+  .hero-sub {
+    font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.55);
+    margin-bottom: 40px; line-height: 1.8; max-width: 380px;
+  }
+  .hero-stats {
+    display: flex; gap: 32px; margin-bottom: 40px;
+  }
+  .stat { }
+  .stat-num { font-size: 24px; font-weight: 700; color: var(--gold); }
+  .stat-label { font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 2px; }
+  .hero-actions { display: flex; gap: 12px; align-items: center; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 14px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 14px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* DESTINATION CARDS in hero */
+  .hero-destinations { display: flex; flex-direction: column; gap: 12px; }
+  .dest-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    display: flex; align-items: center; gap: 16px;
+    cursor: pointer; transition: all 0.25s;
+    text-decoration: none;
+  }
+  .dest-card:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: rgba(201,168,76,0.3);
+    transform: translateX(4px);
+  }
+  .dest-icon {
+    width: 48px; height: 48px; border-radius: 8px;
+    background: rgba(201,168,76,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .dest-info { flex: 1; }
+  .dest-name { font-size: 15px; font-weight: 600; color: var(--white); }
+  .dest-tag { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+  .dest-price { font-size: 14px; font-weight: 700; color: var(--gold); }
+  .dest-price span { font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.4); }
+
+  /* BOOKING SECTION */
+  .booking-section {
+    background: var(--off);
+    padding: 100px 48px;
+  }
+  .section-header { max-width: 1200px; margin: 0 auto 60px; }
+  .section-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-size: clamp(28px, 3vw, 40px); font-weight: 300; color: var(--navy); letter-spacing: -0.5px; }
+  .section-title strong { font-weight: 700; }
+
+  /* WIZARD */
+  .wizard-wrap { max-width: 860px; margin: 0 auto; }
+  .wizard-steps {
+    display: flex; align-items: center; margin-bottom: 48px;
+  }
+  .step-item { display: flex; align-items: center; flex: 1; }
+  .step-item:last-child { flex: none; }
+  .step-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    background: var(--white);
+    transition: all 0.3s; flex-shrink: 0;
+  }
+  .step-dot.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .step-dot.done { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+  .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 8px; }
+  .step-line.done { background: var(--gold); }
+  .step-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-top: 8px; text-align: center;
+  }
+  .step-label.active { color: var(--navy); }
+  .step-wrap { display: flex; flex-direction: column; align-items: center; }
+
+  .wizard-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+  }
+  .wizard-pane { display: none; }
+  .wizard-pane.active { display: block; }
+  .pane-title { font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .pane-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+  /* Destination picker */
+  .dest-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 32px; }
+  .dest-pick {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 16px;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s; background: var(--white);
+  }
+  .dest-pick:hover { border-color: var(--gold); background: #FFFBF0; }
+  .dest-pick.selected { border-color: var(--navy); background: var(--navy); }
+  .dest-pick.selected .pick-name { color: var(--white); }
+  .dest-pick.selected .pick-sub { color: rgba(255,255,255,0.5); }
+  .dest-pick.selected .pick-emoji { filter: none; }
+  .pick-emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+  .pick-name { font-size: 13px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 0.5px; }
+  .pick-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* Form fields */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--navy); }
+  .field input, .field select, .field textarea {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; color: var(--text);
+    background: var(--white);
+    transition: border-color 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  /* Car selection */
+  .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+  .car-card {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .car-card:hover { border-color: var(--gold); }
+  .car-card.selected { border-color: var(--navy); background: #F0F4FA; }
+  .car-thumb {
+    width: 80px; height: 52px;
+    background: var(--off);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .car-info { flex: 1; }
+  .car-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .car-seats { font-size: 10px; font-weight: 500; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+  .car-price { font-size: 15px; font-weight: 700; color: var(--gold); margin-top: 6px; }
+  .car-price span { font-size: 10px; font-weight: 400; color: var(--muted); }
+  .car-features { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .car-feat {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+    background: rgba(11,24,41,0.06); color: var(--navy);
+    padding: 3px 7px; border-radius: 3px;
+  }
+  .car-card.selected .car-feat { background: rgba(11,24,41,0.1); }
+
+  /* PAX selector */
+  .pax-row { display: flex; gap: 12px; margin-bottom: 24px; }
+  .pax-btn {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    background: var(--white); cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .pax-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .pax-btn.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  /* Summary */
+  .summary-box {
+    background: var(--navy);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .summary-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .summary-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+  .summary-val { font-size: 13px; font-weight: 600; color: var(--white); }
+  .summary-total .summary-key { color: var(--gold); font-size: 12px; }
+  .summary-total .summary-val { font-size: 22px; font-weight: 700; color: var(--gold); }
+
+  /* Payment options */
+  .payment-opts { display: flex; gap: 12px; margin-bottom: 24px; }
+  .pay-opt {
+    flex: 1; border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .pay-opt:hover { border-color: var(--gold); }
+  .pay-opt.selected { border-color: var(--navy); background: var(--navy); }
+  .pay-opt.selected .pay-name { color: var(--white); }
+  .pay-opt.selected .pay-desc { color: rgba(255,255,255,0.5); }
+  .pay-icon { font-size: 22px; margin-bottom: 8px; }
+  .pay-name { font-size: 12px; font-weight: 700; color: var(--navy); }
+  .pay-desc { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* Wizard nav */
+  .wizard-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .btn-back {
+    background: none; border: 1.5px solid var(--border);
+    padding: 12px 24px; font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-next {
+    background: var(--navy); border: none;
+    padding: 14px 32px; font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--white); cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s;
+  }
+  .btn-next:hover { background: var(--gold); color: var(--navy); }
+  .btn-confirm {
+    background: var(--gold); border: none;
+    padding: 14px 36px; font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--navy); cursor: pointer; border-radius: var(--radius);
+    transition: all 0.2s;
+  }
+  .btn-confirm:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* SUCCESS */
+  .success-state { text-align: center; padding: 40px 0; display: none; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #E8F5E9; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 24px; font-size: 32px;
+  }
+  .success-title { font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: var(--muted); max-width: 360px; margin: 0 auto 24px; }
+  .success-ref {
+    display: inline-block;
+    background: var(--navy); color: var(--gold);
+    padding: 10px 24px; border-radius: var(--radius);
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  }
+
+  /* INCLUSIONS BAR */
+  .inclusions {
+    background: var(--navy);
+    padding: 60px 48px;
+  }
+  .incl-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(6,1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-lg); overflow: hidden; }
+  .incl-item {
+    background: var(--navy);
+    padding: 28px 20px; text-align: center;
+    transition: background 0.2s;
+  }
+  .incl-item:hover { background: rgba(201,168,76,0.08); }
+  .incl-ic { font-size: 26px; margin-bottom: 10px; }
+  .incl-name { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+  .incl-sub { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+  /* FOOTER */
+  footer {
+    background: #070E1A;
+    padding: 48px;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .footer-logo { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .footer-contact { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+  .footer-contact a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer-tagline { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-top: 20px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-content { grid-template-columns: 1fr; padding: 40px 20px; gap: 40px; }
+    .hero-destinations { display: none; }
+    .booking-section { padding: 60px 20px; }
+    .wizard-card { padding: 28px 20px; }
+    .dest-grid { grid-template-columns: 1fr 1fr; }
+    .car-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr; }
+    .incl-grid { grid-template-columns: repeat(3,1fr); }
+    .payment-opts { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">RR</div>
+    <div class="nav-logo-text">
+      <div class="brand">Royal Route</div>
+      <div class="sub">Holidays</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#book">Book Now</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="admin.html">Admin</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Plan Your Trip</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="destinations">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">Navi Mumbai's Trusted Travel Partner</div>
+      <h1 class="hero-headline">
+        Discover<br>
+        <strong>India.</strong>
+      </h1>
+      <p class="hero-sub">Curated journeys to the mountains, temples, and valleys of North India — with private vehicles and end-to-end care.</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Happy Trips</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Support</div></div>
+        <div class="stat"><div class="stat-num">0</div><div class="stat-label">Hidden Charges</div></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Book a Package</button>
+        <button class="btn-ghost" onclick="window.open('tel:+919024205389')">+91 90242 05389</button>
+      </div>
+    </div>
+    <div class="hero-destinations">
+      <a class="dest-card" href="#book" onclick="setTimeout(()=>selectDest('manali'),300)">
+        <div class="dest-icon">🏔️</div>
+        <div class="dest-info">
+          <div class="dest-name">Manali</div>
+          <div class="dest-tag">Himachal Pradesh · 5N/6D</div>
+        </div>
+        <div class="dest-price">₹42,000 <span>/ 2 pax</span></div>
+      </a>
+      <a class="dest-card" href="#book" onclick="setTimeout(()=>selectDest('kedarnath'),300)">
+        <div class="dest-icon">🛕</div>
+        <div class="dest-info">
+          <div class="dest-name">Kedarnath</div>
+          <div class="dest-tag">Uttarakhand · 4N/5D</div>
+        </div>
+        <div class="dest-price">₹35,000 <span>/ 2 pax</span></div>
+      </a>
+      <a class="dest-card" href="#book" onclick="setTimeout(()=>selectDest('rishikesh'),300)">
+        <div class="dest-icon">🌊</div>
+        <div class="dest-info">
+          <div class="dest-name">Rishikesh</div>
+          <div class="dest-tag">Uttarakhand · 3N/4D</div>
+        </div>
+        <div class="dest-price">₹28,000 <span>/ 2 pax</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUSIONS -->
+<div class="inclusions">
+  <div class="incl-grid">
+    <div class="incl-item"><div class="incl-ic">🏨</div><div class="incl-name">Premium Hotel</div><div class="incl-sub">3-4 Star Stay</div></div>
+    <div class="incl-item"><div class="incl-ic">🍽️</div><div class="incl-name">Meals</div><div class="incl-sub">Breakfast & Dinner</div></div>
+    <div class="incl-item"><div class="incl-ic">🚗</div><div class="incl-name">Private Vehicle</div><div class="incl-sub">AC with Driver</div></div>
+    <div class="incl-item"><div class="incl-ic">🗺️</div><div class="incl-name">Sightseeing</div><div class="incl-sub">All Major Spots</div></div>
+    <div class="incl-item"><div class="incl-ic">📸</div><div class="incl-name">Experiences</div><div class="incl-sub">Curated Moments</div></div>
+    <div class="incl-item"><div class="incl-ic">🎧</div><div class="incl-name">24×7 Support</div><div class="incl-sub">Anny Singh</div></div>
+  </div>
+</div>
+
+<!-- BOOKING SECTION -->
+<section class="booking-section" id="book">
+  <div class="section-header">
+    <div class="section-eyebrow">Plan Your Journey</div>
+    <h2 class="section-title">Book Your <strong>Package</strong></h2>
+  </div>
+
+  <div class="wizard-wrap">
+    <!-- Steps -->
+    <div class="wizard-steps" id="stepsBar">
+      <div class="step-wrap"><div class="step-dot active" id="sd1">1</div><div class="step-label active" id="sl1">Destination</div></div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-wrap"><div class="step-dot" id="sd2">2</div><div class="step-label" id="sl2">Details</div></div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-wrap"><div class="step-dot" id="sd3">3</div><div class="step-label" id="sl3">Vehicle</div></div>
+      <div class="step-line" id="line3"></div>
+      <div class="step-wrap"><div class="step-dot" id="sd4">4</div><div class="step-label" id="sl4">Payment</div></div>
+    </div>
+
+    <div class="wizard-card" id="wizardCard">
+
+      <!-- PANE 1: Destination -->
+      <div class="wizard-pane active" id="pane1">
+        <div class="pane-title">Where do you want to go?</div>
+        <div class="pane-sub">Pick one destination to begin crafting your package.</div>
+        <div class="dest-grid">
+          <div class="dest-pick" onclick="pickDest(this,'manali')" id="dp-manali">
+            <span class="pick-emoji">🏔️</span>
+            <div class="pick-name">Manali</div>
+            <div class="pick-sub">Himachal Pradesh</div>
+          </div>
+          <div class="dest-pick" onclick="pickDest(this,'kedarnath')" id="dp-kedarnath">
+            <span class="pick-emoji">🛕</span>
+            <div class="pick-name">Kedarnath</div>
+            <div class="pick-sub">Uttarakhand</div>
+          </div>
+          <div class="dest-pick" onclick="pickDest(this,'rishikesh')" id="dp-rishikesh">
+            <span class="pick-emoji">🌊</span>
+            <div class="pick-name">Rishikesh</div>
+            <div class="pick-sub">Uttarakhand</div>
+          </div>
+          <div class="dest-pick" onclick="pickDest(this,'shimla')" id="dp-shimla">
+            <span class="pick-emoji">❄️</span>
+            <div class="pick-name">Shimla</div>
+            <div class="pick-sub">Himachal Pradesh</div>
+          </div>
+          <div class="dest-pick" onclick="pickDest(this,'goa')" id="dp-goa">
+            <span class="pick-emoji">🏖️</span>
+            <div class="pick-name">Goa</div>
+            <div class="pick-sub">Coastal Retreat</div>
+          </div>
+          <div class="dest-pick" onclick="pickDest(this,'kerala')" id="dp-kerala">
+            <span class="pick-emoji">🌴</span>
+            <div class="pick-name">Kerala</div>
+            <div class="pick-sub">God's Own Country</div>
+          </div>
+        </div>
+        <div class="wizard-nav">
+          <span></span>
+          <button class="btn-next" onclick="goStep(2)">Next →</button>
+        </div>
+      </div>
+
+      <!-- PANE 2: Details -->
+      <div class="wizard-pane" id="pane2">
+        <div class="pane-title">Trip & traveller details</div>
+        <div class="pane-sub">Tell us a bit about your trip so we can prepare the perfect package.</div>
+        <div class="form-row">
+          <div class="field"><label>Full Name</label><input type="text" placeholder="Your full name" id="f-name"></div>
+          <div class="field"><label>Phone Number</label><input type="tel" placeholder="+91 00000 00000" id="f-phone"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Email Address</label><input type="email" placeholder="you@email.com" id="f-email"></div>
+          <div class="field"><label>City You're Travelling From</label><input type="text" placeholder="Navi Mumbai" id="f-city"></div>
+        </div>
+        <div class="form-row triple">
+          <div class="field">
+            <label>Travel Date</label>
+            <input type="date" id="f-date">
+          </div>
+          <div class="field">
+            <label>Return Date</label>
+            <input type="date" id="f-return">
+          </div>
+          <div class="field">
+            <label>Package Type</label>
+            <select id="f-type">
+              <option value="">Select type</option>
+              <option>Honeymoon</option>
+              <option>Family Trip</option>
+              <option>Group Tour</option>
+              <option>Adventure Tour</option>
+              <option>Pilgrimage</option>
+              <option>Corporate</option>
+            </select>
+          </div>
+        </div>
+        <div class="pane-sub" style="margin-top:16px;margin-bottom:12px;">How many travellers?</div>
+        <div class="pax-row" id="paxRow">
+          <button class="pax-btn" onclick="pickPax(this,2)">2 Pax</button>
+          <button class="pax-btn" onclick="pickPax(this,4)">4 Pax</button>
+          <button class="pax-btn" onclick="pickPax(this,6)">6 Pax</button>
+          <button class="pax-btn" onclick="pickPax(this,8)">8 Pax</button>
+          <button class="pax-btn" onclick="pickPax(this,10)">10+ Pax</button>
+        </div>
+        <div class="form-row single">
+          <div class="field"><label>Special Requests (Optional)</label><textarea id="f-notes" placeholder="Any special requirements, dietary needs, accessibility…"></textarea></div>
+        </div>
+        <div class="wizard-nav">
+          <button class="btn-back" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- PANE 3: Vehicle -->
+      <div class="wizard-pane" id="pane3">
+        <div class="pane-title">Choose your vehicle</div>
+        <div class="pane-sub">All vehicles are AC, well-maintained, and come with an experienced driver.</div>
+        <div class="car-grid" id="carGrid">
+          <!-- Cars injected by JS from admin data or defaults -->
+        </div>
+        <div class="wizard-nav">
+          <button class="btn-back" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" onclick="goStep(4)">Next →</button>
+        </div>
+      </div>
+
+      <!-- PANE 4: Payment -->
+      <div class="wizard-pane" id="pane4">
+        <div class="pane-title">Confirm & pay</div>
+        <div class="pane-sub">Review your booking summary and choose a payment mode.</div>
+        <div class="summary-box" id="summaryBox">
+          <div class="summary-title">Booking Summary</div>
+          <div class="summary-row"><span class="summary-key">Destination</span><span class="summary-val" id="sum-dest">—</span></div>
+          <div class="summary-row"><span class="summary-key">Travel Date</span><span class="summary-val" id="sum-date">—</span></div>
+          <div class="summary-row"><span class="summary-key">Travellers</span><span class="summary-val" id="sum-pax">—</span></div>
+          <div class="summary-row"><span class="summary-key">Vehicle</span><span class="summary-val" id="sum-car">—</span></div>
+          <div class="summary-row"><span class="summary-key">Package Type</span><span class="summary-val" id="sum-type">—</span></div>
+          <div class="summary-row summary-total"><span class="summary-key">Total Amount</span><span class="summary-val" id="sum-total">—</span></div>
+        </div>
+        <div class="pane-sub" style="margin-bottom:12px;">Select payment mode</div>
+        <div class="payment-opts">
+          <div class="pay-opt selected" onclick="pickPay(this,'advance')">
+            <div class="pay-icon">💰</div>
+            <div class="pay-name">Advance (25%)</div>
+            <div class="pay-desc">Pay 25% now, rest on trip</div>
+          </div>
+          <div class="pay-opt" onclick="pickPay(this,'full')">
+            <div class="pay-icon">✅</div>
+            <div class="pay-name">Full Payment</div>
+            <div class="pay-desc">Pay 100% & confirm</div>
+          </div>
+          <div class="pay-opt" onclick="pickPay(this,'whatsapp')">
+            <div class="pay-icon">💬</div>
+            <div class="pay-name">WhatsApp Confirm</div>
+            <div class="pay-desc">Call & book manually</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Name on Booking</label><input type="text" id="pay-name" placeholder="Full name for confirmation"></div>
+          <div class="field"><label>UPI / Reference ID <span style="font-weight:400;text-transform:none;color:#aaa">(if paid)</span></label><input type="text" id="pay-upi" placeholder="UPI transaction ID"></div>
+        </div>
+        <div class="wizard-nav">
+          <button class="btn-back" onclick="goStep(3)">← Back</button>
+          <button class="btn-confirm" onclick="confirmBooking()">Confirm Booking ✓</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Booking Confirmed!</div>
+        <p class="success-sub">Anny Singh will contact you within 30 minutes to finalize your itinerary.</p>
+        <div class="success-ref" id="refCode">REF: RRH-2026-XXXX</div>
+        <br><br>
+        <button class="btn-ghost" style="color:#555;border-color:#ddd" onclick="resetWizard()">Book Another Trip</button>
+      </div>
+
+    </div><!-- wizard-card -->
+  </div><!-- wizard-wrap -->
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Royal Route Holidays</div>
+  <div class="footer-contact">Owner: <strong style="color:rgba(255,255,255,0.7)">Anny Singh</strong> &nbsp;|&nbsp; <a href="tel:+919024205389">+91-9024205389</a></div>
+  <div class="footer-contact">Based in Ganeshwar, Navi Mumbai · Your Journey, Our Responsibility</div>
+  <div class="footer-tagline">Family Trips &nbsp;·&nbsp; Honeymoon &nbsp;·&nbsp; Group Tours &nbsp;·&nbsp; Adventure &nbsp;·&nbsp; Pilgrimage &nbsp;·&nbsp; Corporate</div>
+</footer>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────
+let currentStep = 1;
+let selectedDest = '';
+let selectedCar = null;
+let selectedPax = 2;
+let selectedPay = 'advance';
+
+// Default car catalogue (overridden by admin panel data if available)
+const defaultCars = [
+  { id:'dzire', name:'Maruti Swift Dzire', seats:'4 Seater', emoji:'🚗', price:0, basePrice:2800, features:['AC','Sedan','4 Seater'], desc:'Economy Sedan' },
+  { id:'ertiga', name:'Maruti Ertiga', seats:'6 Seater', emoji:'🚙', price:0, basePrice:3500, features:['AC','MUV','6 Seater'], desc:'Compact MUV' },
+  { id:'crysta', name:'Toyota Innova Crysta', seats:'7 Seater', emoji:'🚐', price:0, basePrice:4500, features:['AC','Premium','7 Seater','Captain Seats'], desc:'Premium MPV' },
+  { id:'innova', name:'Toyota Innova', seats:'7 Seater', emoji:'🚐', price:0, basePrice:4000, features:['AC','MPV','7 Seater'], desc:'Reliable MPV' },
+  { id:'tempo12', name:'Tempo Traveller 12', seats:'12 Seater', emoji:'🚌', price:0, basePrice:6500, features:['AC','Van','12 Seater','Group'], desc:'Group Van' },
+  { id:'tempo17', name:'Tempo Traveller 17', seats:'17 Seater', emoji:'🚌', price:0, basePrice:8000, features:['AC','Van','17 Seater','Large Group'], desc:'Large Group Van' },
+];
+
+const destPrices = { manali:42000, kedarnath:35000, rishikesh:28000, shimla:38000, goa:45000, kerala:52000 };
+const destLabels = { manali:'Manali, HP', kedarnath:'Kedarnath, UK', rishikesh:'Rishikesh, UK', shimla:'Shimla, HP', goa:'Goa', kerala:'Kerala' };
+
+function getCars() {
+  try {
+    const saved = localStorage.getItem('rr_cars');
+    return saved ? JSON.parse(saved) : defaultCars;
+  } catch(e) { return defaultCars; }
+}
+
+// ─── DESTINATION ───────────────────────────────────────
+function pickDest(el, dest) {
+  document.querySelectorAll('.dest-pick').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedDest = dest;
+}
+
+function selectDest(dest) {
+  const el = document.getElementById('dp-' + dest);
+  if(el) pickDest(el, dest);
+}
+
+// ─── PAX ───────────────────────────────────────────────
+function pickPax(el, n) {
+  document.querySelectorAll('.pax-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPax = n;
+}
+
+// ─── PAY ───────────────────────────────────────────────
+function pickPay(el, mode) {
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPay = mode;
+}
+
+// ─── CARS ──────────────────────────────────────────────
+function renderCars() {
+  const cars = getCars();
+  const grid = document.getElementById('carGrid');
+  grid.innerHTML = '';
+  cars.forEach(car => {
+    const div = document.createElement('div');
+    div.className = 'car-card' + (selectedCar === car.id ? ' selected' : '');
+    div.onclick = () => {
+      document.querySelectorAll('.car-card').forEach(c => c.classList.remove('selected'));
+      div.classList.add('selected');
+      selectedCar = car.id;
+    };
+    const price = car.price || car.basePrice || 0;
+    const imgHtml = car.image
+      ? `<img src="${car.image}" style="width:80px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0;" />`
+      : `<div class="car-thumb">${car.emoji||'🚗'}</div>`;
+    div.innerHTML = `
+      ${imgHtml}
+      <div class="car-info">
+        <div class="car-name">${car.name}</div>
+        <div class="car-seats">${car.seats}</div>
+        <div class="car-price">₹${price.toLocaleString()} <span>/ day</span></div>
+        <div class="car-features">${(car.features||[]).map(f=>`<span class="car-feat">${f}</span>`).join('')}</div>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ─── STEPS ─────────────────────────────────────────────
+function goStep(n) {
+  if(n === 2 && !selectedDest) { alert('Please select a destination.'); return; }
+  if(n === 3 && !document.getElementById('f-name').value.trim()) { alert('Please enter your name.'); return; }
+  if(n === 4 && !selectedCar) { alert('Please select a vehicle.'); return; }
+
+  if(n === 3) renderCars();
+  if(n === 4) buildSummary();
+
+  // Update dots
+  for(let i=1;i<=4;i++) {
+    const dot = document.getElementById('sd'+i);
+    const lbl = document.getElementById('sl'+i);
+    dot.classList.remove('active','done');
+    lbl.classList.remove('active');
+    if(i < n) { dot.classList.add('done'); dot.innerHTML='✓'; }
+    else if(i === n) { dot.classList.add('active'); dot.innerHTML=i; lbl.classList.add('active'); }
+    else { dot.innerHTML = i; }
+    if(i <= 3) {
+      const line = document.getElementById('line'+i);
+      line.classList.toggle('done', i < n);
+    }
+  }
+
+  document.querySelectorAll('.wizard-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane'+n).classList.add('active');
+  currentStep = n;
+  document.getElementById('wizardCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── SUMMARY ───────────────────────────────────────────
+function buildSummary() {
+  const cars = getCars();
+  const car = cars.find(c => c.id === selectedCar);
+  const basePackage = destPrices[selectedDest] || 0;
+  const carPrice = car ? (car.price || car.basePrice || 0) : 0;
+
+  // Calculate nights
+  const d1 = document.getElementById('f-date').value;
+  const d2 = document.getElementById('f-return').value;
+  let nights = 5;
+  if(d1 && d2) {
+    const diff = (new Date(d2) - new Date(d1)) / 86400000;
+    if(diff > 0) nights = diff;
+  }
+
+  const total = basePackage + (carPrice * nights * (selectedPax/2));
+
+  document.getElementById('sum-dest').textContent = destLabels[selectedDest] || selectedDest;
+  document.getElementById('sum-date').textContent = d1 ? new Date(d1).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : 'TBD';
+  document.getElementById('sum-pax').textContent = selectedPax + ' Travellers';
+  document.getElementById('sum-car').textContent = car ? car.name : '—';
+  document.getElementById('sum-type').textContent = document.getElementById('f-type').value || 'General';
+  document.getElementById('sum-total').textContent = '₹' + total.toLocaleString('en-IN');
+}
+
+// ─── CONFIRM ───────────────────────────────────────────
+function confirmBooking() {
+  const ref = 'RRH-2026-' + Math.floor(1000 + Math.random()*9000);
+  document.getElementById('refCode').textContent = 'REF: ' + ref;
+
+  // Save booking
+  try {
+    const bookings = JSON.parse(localStorage.getItem('rr_bookings') || '[]');
+    bookings.push({
+      ref, dest: selectedDest, pax: selectedPax, car: selectedCar,
+      name: document.getElementById('f-name').value,
+      phone: document.getElementById('f-phone').value,
+      email: document.getElementById('f-email').value,
+      date: document.getElementById('f-date').value,
+      type: document.getElementById('f-type').value,
+      payment: selectedPay,
+      created: new Date().toISOString()
+    });
+    localStorage.setItem('rr_bookings', JSON.stringify(bookings));
+  } catch(e){}
+
+  document.querySelectorAll('.wizard-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('stepsBar').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+
+  if(selectedPay === 'whatsapp') {
+    setTimeout(()=>{ window.open('https://wa.me/919024205389?text=Hi%20Anny%20Singh%2C%20I%20want%20to%20book%20a%20trip%20to%20' + selectedDest + '.%20Ref%3A%20' + ref); }, 800);
+  }
+}
+
+function resetWizard() {
+  selectedDest=''; selectedCar=null; selectedPax=2; selectedPay='advance';
+  document.getElementById('stepsBar').style.display = 'flex';
+  document.getElementById('successState').style.display = 'none';
+  document.querySelectorAll('.dest-pick').forEach(d=>d.classList.remove('selected'));
+  document.querySelectorAll('.wizard-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{ d.classList.remove('active','done'); d.innerHTML=i+1; });
+  document.querySelectorAll('.step-label').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sd1').classList.add('active');
+  document.getElementById('sl1').classList.add('active');
+  document.getElementById('pane1').classList.add('active');
+  currentStep = 1;
+}
+
+// Init
+renderCars();
+</script>
+</body>
+</html>
